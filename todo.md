@@ -76,3 +76,10 @@
 
 ## Alterações Solicitadas - Sprint 3
 - [x] Expandir opções de Código em Ocorrências (adicionar opções 16-42 + Outros)
+
+## Alterações Solicitadas - Sprint 4
+- [x] Remover sub-menu FINALIZAR de Viatura
+- [x] Criar modal de finalização de KM ao registrar viatura
+- [x] Adicionar campos de Local (15 setores + Outros) em Ocorrências
+- [x] Adicionar campos Data, Hora Inicial, Observação, Fotos/Vídeos em Ocorrências
+- [x] Criar modal de finalização de ocorrência com Hora Final
