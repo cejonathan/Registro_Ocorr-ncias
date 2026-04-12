@@ -73,3 +73,6 @@
 - [ ] Implementar fluxo de finalização de viatura com KM FINAL e HORA FINAL
 - [x] Reformular formulário Ocorrências: Viatura, Condutor, Apoio, Código
 - [x] Adicionar campo customizável para opção "Outros" em todos os dropdowns
+
+## Alterações Solicitadas - Sprint 3
+- [x] Expandir opções de Código em Ocorrências (adicionar opções 16-42 + Outros)

@@ -82,6 +82,34 @@ const CODE_OPTIONS = [
   "13 - Sinistro de trânsito com vítima",
   "14 - Animais na pista",
   "15 - Trabalho administrativo",
+  "16 - Transporte interno",
+  "17 - Solicitação de munícipe",
+  "18 - Operação em semáforo",
+  "19 - Fiscalização em circulação",
+  "20 - Apoio a veículo quebrado",
+  "21 - Travessia de alunos",
+  "22 - Apoio a feira livre",
+  "23 - Desvio de trânsito",
+  "24 - Deslocamento ao centro do servidor",
+  "25 - Apoio a eventos religiosos",
+  "26 - Aferição de radar",
+  "27 - Autorizar veículos a passar no vermelho",
+  "28 - Manutenção da VTR",
+  "29 - Obra SAAE",
+  "30 - Remoção de veículo",
+  "31 - Remoção de veículo abandonado",
+  "32 - Apoio a pintura",
+  "33 - Apoio a poda de árvore",
+  "34 - Apoio a troca de poste/Recolha de fios caídos",
+  "35 - Deslocamento para diretoria de trânsito",
+  "36 - Deslocamento para limpar VTR",
+  "37 - Blitz",
+  "38 - Fiscalização em extensão",
+  "39 - Controle de fluxo",
+  "40 - Fiscalização em ponto fixo",
+  "41 - Posturas",
+  "42 - Vistoria",
+  "Outros",
 ];
 
 export default function OccurrenceRegister() {
@@ -93,6 +121,7 @@ export default function OccurrenceRegister() {
     support: "",
     supportCustom: "",
     code: "",
+    codeCustom: "",
   });
 
   const handleSelectChange = (field: string, value: string) => {
@@ -132,15 +161,21 @@ export default function OccurrenceRegister() {
       return;
     }
 
+    if (formData.code === "Outros" && !formData.codeCustom) {
+      toast.error("Especifique o código");
+      return;
+    }
+
     const finalVehicle = formData.vehicle === "Outros" ? formData.vehicleCustom : formData.vehicle;
     const finalDriver = formData.driver === "Outros" ? formData.driverCustom : formData.driver;
     const finalSupport = formData.support === "Outros" ? formData.supportCustom : formData.support;
+    const finalCode = formData.code === "Outros" ? formData.codeCustom : formData.code;
 
     console.log({
       vehicle: finalVehicle,
       driver: finalDriver,
       support: finalSupport,
-      code: formData.code,
+      code: finalCode,
     });
 
     toast.success("Ocorrência registrada com sucesso!");
@@ -152,6 +187,7 @@ export default function OccurrenceRegister() {
       support: "",
       supportCustom: "",
       code: "",
+      codeCustom: "",
     });
   };
 
@@ -253,7 +289,7 @@ export default function OccurrenceRegister() {
               <SelectTrigger id="code" className="h-12">
                 <SelectValue placeholder="Selecione o código" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-64">
                 {CODE_OPTIONS.map((option) => (
                   <SelectItem key={option} value={option}>
                     {option}
@@ -261,6 +297,14 @@ export default function OccurrenceRegister() {
                 ))}
               </SelectContent>
             </Select>
+            {formData.code === "Outros" && (
+              <Input
+                placeholder="Especifique o código"
+                value={formData.codeCustom}
+                onChange={(e) => handleInputChange("codeCustom", e.target.value)}
+                className="h-10 mt-2"
+              />
+            )}
           </div>
 
           {/* Submit Button */}
