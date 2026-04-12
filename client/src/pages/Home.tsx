@@ -71,10 +71,10 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="sticky top-0 z-40 bg-card border-b border-border shadow-sm">
-        <div className="container max-w-full px-4 py-4 flex items-center justify-between">
+        <div className="container max-w-full px-4 py-4 flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
               <Truck className="w-5 h-5 text-accent-foreground" />
@@ -93,10 +93,44 @@ export default function Home() {
             <LogOut className="w-5 h-5" />
           </Button>
         </div>
+
+        {/* Main Navigation Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full border-t border-border">
+          <TabsList className="grid w-full grid-cols-4 bg-transparent rounded-none h-auto p-0 border-b border-border">
+            <TabsTrigger
+              value="dashboard"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:bg-transparent py-4 flex flex-col items-center gap-1"
+            >
+              <BarChart3 className="w-5 h-5" />
+              <span className="text-xs">Painel</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="viatura"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:bg-transparent py-4 flex flex-col items-center gap-1"
+            >
+              <Truck className="w-5 h-5" />
+              <span className="text-xs">Viatura</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="occurrences"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:bg-transparent py-4 flex flex-col items-center gap-1"
+            >
+              <AlertCircle className="w-5 h-5" />
+              <span className="text-xs">Ocorrências</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="reports"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:bg-transparent py-4 flex flex-col items-center gap-1"
+            >
+              <BarChart3 className="w-5 h-5" />
+              <span className="text-xs">Relatórios</span>
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
 
       {/* Main Content */}
-      <div className="container max-w-full px-4 py-6">
+      <div className="container max-w-full px-4 py-6 pb-12">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Dashboard Tab */}
           <TabsContent value="dashboard" className="space-y-6">
@@ -110,14 +144,14 @@ export default function Home() {
               onValueChange={(val) => setActiveSubTab({ ...activeSubTab, viatura: val })}
               className="w-full"
             >
-              <TabsList className="grid w-full grid-cols-2 bg-muted p-1 rounded-lg">
+              <TabsList className="grid w-full grid-cols-2 bg-muted p-1 rounded-lg mb-6">
                 <TabsTrigger value="register" className="flex items-center gap-2">
                   <Plus className="w-4 h-4" />
-                  <span className="hidden sm:inline">Registrar</span>
+                  <span>Registrar</span>
                 </TabsTrigger>
                 <TabsTrigger value="history" className="flex items-center gap-2">
                   <History className="w-4 h-4" />
-                  <span className="hidden sm:inline">Histórico</span>
+                  <span>Histórico</span>
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="register" className="space-y-4">
@@ -136,14 +170,14 @@ export default function Home() {
               onValueChange={(val) => setActiveSubTab({ ...activeSubTab, occurrences: val })}
               className="w-full"
             >
-              <TabsList className="grid w-full grid-cols-2 bg-muted p-1 rounded-lg">
+              <TabsList className="grid w-full grid-cols-2 bg-muted p-1 rounded-lg mb-6">
                 <TabsTrigger value="register" className="flex items-center gap-2">
                   <Plus className="w-4 h-4" />
-                  <span className="hidden sm:inline">Registrar</span>
+                  <span>Registrar</span>
                 </TabsTrigger>
                 <TabsTrigger value="history" className="flex items-center gap-2">
                   <History className="w-4 h-4" />
-                  <span className="hidden sm:inline">Histórico</span>
+                  <span>Histórico</span>
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="register" className="space-y-4">
@@ -162,14 +196,14 @@ export default function Home() {
               onValueChange={(val) => setActiveSubTab({ ...activeSubTab, reports: val })}
               className="w-full"
             >
-              <TabsList className="grid w-full grid-cols-2 bg-muted p-1 rounded-lg">
+              <TabsList className="grid w-full grid-cols-2 bg-muted p-1 rounded-lg mb-6">
                 <TabsTrigger value="register" className="flex items-center gap-2">
                   <Plus className="w-4 h-4" />
-                  <span className="hidden sm:inline">Gerar</span>
+                  <span>Gerar</span>
                 </TabsTrigger>
                 <TabsTrigger value="history" className="flex items-center gap-2">
                   <History className="w-4 h-4" />
-                  <span className="hidden sm:inline">Histórico</span>
+                  <span>Histórico</span>
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="register" className="space-y-4">
@@ -180,38 +214,6 @@ export default function Home() {
               </TabsContent>
             </Tabs>
           </TabsContent>
-
-          {/* Tab List - Bottom Navigation */}
-          <TabsList className="grid w-full grid-cols-4 fixed bottom-0 left-0 right-0 rounded-none border-t border-border bg-card h-16 p-0">
-            <TabsTrigger
-              value="dashboard"
-              className="flex flex-col items-center gap-1 rounded-none data-[state=active]:bg-transparent"
-            >
-              <BarChart3 className="w-5 h-5" />
-              <span className="text-xs">Painel</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="viatura"
-              className="flex flex-col items-center gap-1 rounded-none data-[state=active]:bg-transparent"
-            >
-              <Truck className="w-5 h-5" />
-              <span className="text-xs">Viatura</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="occurrences"
-              className="flex flex-col items-center gap-1 rounded-none data-[state=active]:bg-transparent"
-            >
-              <AlertCircle className="w-5 h-5" />
-              <span className="text-xs">Ocorrências</span>
-            </TabsTrigger>
-            <TabsTrigger
-              value="reports"
-              className="flex flex-col items-center gap-1 rounded-none data-[state=active]:bg-transparent"
-            >
-              <BarChart3 className="w-5 h-5" />
-              <span className="text-xs">Relatórios</span>
-            </TabsTrigger>
-          </TabsList>
         </Tabs>
       </div>
     </div>

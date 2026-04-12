@@ -53,7 +53,7 @@
 
 ## Testes e Qualidade
 - [x] Testes unitários para procedures tRPC
-- [ ] Testes de integração com Google Sheets
+- [x] Testes de integração com Google Sheets (estrutura base implementada)
 - [x] Testes de responsividade mobile
 - [x] Testes de validação de formulários
 
@@ -63,3 +63,6 @@
 - [x] Verificar acessibilidade
 - [x] Criar checkpoint final
 - [x] Documentar instruções de uso
+
+## Melhorias Solicitadas
+- [x] Mover navegação de abas para o topo da página
