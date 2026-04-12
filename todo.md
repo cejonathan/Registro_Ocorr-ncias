@@ -61,5 +61,5 @@
 - [x] Otimizar performance mobile
 - [x] Testar em diferentes dispositivos
 - [x] Verificar acessibilidade
-- [ ] Criar checkpoint final
-- [ ] Documentar instruções de uso
+- [x] Criar checkpoint final
+- [x] Documentar instruções de uso
