@@ -1,159 +1,293 @@
 import { useState } from "react";
-import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
-import { Loader2, Check } from "lucide-react";
+
+const VEHICLE_OPTIONS = [
+  "Sem Viatura",
+  "1389",
+  "1390",
+  "1391",
+  "1392",
+  "1393",
+  "1394",
+  "1395",
+  "MH 01",
+  "MH 02",
+  "MH 03",
+  "MH 04",
+  "MH 05",
+  "MH 06",
+  "MH 07",
+  "MH 08",
+  "Outros",
+];
+
+const AGENT_OPTIONS = [
+  "DET 02",
+  "DET 03",
+  "DET 06",
+  "DET 07",
+  "DET 08",
+  "DET 10",
+  "DET 12",
+  "DET 17",
+  "DET 18",
+  "DET 20",
+  "DET 22",
+  "DET 35",
+  "DET 41",
+  "DET 44",
+  "DET 46",
+  "DET 47",
+  "DET 49",
+  "DET 54",
+  "DET 55",
+  "DET 59",
+  "DET 61",
+  "DET 62",
+  "DET 65",
+  "DET 67",
+  "DET 68",
+  "DET 74",
+  "DET 75",
+  "DET 86",
+  "DET 89",
+  "DET 90",
+  "Outros",
+];
 
 export default function VehicleRegister() {
   const [formData, setFormData] = useState({
-    agentName: "",
-    vehicleId: "",
-    openingKm: "",
-    registeredAt: new Date().toISOString().slice(0, 16),
-    observations: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const createVehicle = trpc.vehicles.create.useMutation({
-    onSuccess: () => {
-      toast.success("Viatura registrada com sucesso!");
-      setFormData({
-        agentName: "",
-        vehicleId: "",
-        openingKm: "",
-        registeredAt: new Date().toISOString().slice(0, 16),
-        observations: "",
-      });
-      setIsSubmitting(false);
-    },
-    onError: (error) => {
-      toast.error(error.message || "Erro ao registrar viatura");
-      setIsSubmitting(false);
-    },
+    vehicle: "",
+    vehicleCustom: "",
+    driver: "",
+    driverCustom: "",
+    support: "",
+    supportCustom: "",
+    date: "",
+    initialKm: "",
+    initialTime: "",
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSelectChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.agentName || !formData.vehicleId || !formData.openingKm) {
+
+    if (
+      !formData.vehicle ||
+      !formData.driver ||
+      !formData.support ||
+      !formData.date ||
+      !formData.initialKm ||
+      !formData.initialTime
+    ) {
       toast.error("Preencha todos os campos obrigatórios");
       return;
     }
 
-    setIsSubmitting(true);
-    try {
-      await createVehicle.mutateAsync({
-        agentName: formData.agentName,
-        vehicleId: formData.vehicleId,
-        openingKm: parseInt(formData.openingKm),
-        registeredAt: new Date(formData.registeredAt),
-        observations: formData.observations || undefined,
-      });
-    } catch (error) {
-      console.error(error);
+    if (formData.vehicle === "Outros" && !formData.vehicleCustom) {
+      toast.error("Especifique a viatura");
+      return;
     }
+
+    if (formData.driver === "Outros" && !formData.driverCustom) {
+      toast.error("Especifique o condutor");
+      return;
+    }
+
+    if (formData.support === "Outros" && !formData.supportCustom) {
+      toast.error("Especifique o apoio");
+      return;
+    }
+
+    const finalVehicle = formData.vehicle === "Outros" ? formData.vehicleCustom : formData.vehicle;
+    const finalDriver = formData.driver === "Outros" ? formData.driverCustom : formData.driver;
+    const finalSupport = formData.support === "Outros" ? formData.supportCustom : formData.support;
+
+    console.log({
+      vehicle: finalVehicle,
+      driver: finalDriver,
+      support: finalSupport,
+      date: formData.date,
+      initialKm: formData.initialKm,
+      initialTime: formData.initialTime,
+    });
+
+    toast.success("Viatura registrada com sucesso!");
+    setFormData({
+      vehicle: "",
+      vehicleCustom: "",
+      driver: "",
+      driverCustom: "",
+      support: "",
+      supportCustom: "",
+      date: "",
+      initialKm: "",
+      initialTime: "",
+    });
   };
 
   return (
-    <Card className="border-border bg-card">
+    <Card className="border-0 shadow-sm">
       <CardHeader>
-        <CardTitle>Registrar Viatura</CardTitle>
-        <CardDescription>Registre a abertura de km da viatura</CardDescription>
+        <CardTitle className="text-lg uppercase font-bold">Registrar KM</CardTitle>
+        <CardDescription>Registre a abertura de quilometragem da viatura</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Agent Name */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Viatura */}
           <div className="space-y-2">
-            <Label htmlFor="agentName" className="text-base font-medium">
-              Nome do Agente *
+            <Label htmlFor="vehicle" className="font-semibold uppercase text-sm">
+              Viatura
+            </Label>
+            <Select value={formData.vehicle} onValueChange={(val) => handleSelectChange("vehicle", val)}>
+              <SelectTrigger id="vehicle" className="h-12">
+                <SelectValue placeholder="Selecione a viatura" />
+              </SelectTrigger>
+              <SelectContent>
+                {VEHICLE_OPTIONS.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {formData.vehicle === "Outros" && (
+              <Input
+                placeholder="Especifique a viatura"
+                value={formData.vehicleCustom}
+                onChange={(e) => handleInputChange("vehicleCustom", e.target.value)}
+                className="h-10 mt-2"
+              />
+            )}
+          </div>
+
+          {/* Condutor */}
+          <div className="space-y-2">
+            <Label htmlFor="driver" className="font-semibold uppercase text-sm">
+              Condutor
+            </Label>
+            <Select value={formData.driver} onValueChange={(val) => handleSelectChange("driver", val)}>
+              <SelectTrigger id="driver" className="h-12">
+                <SelectValue placeholder="Selecione o condutor" />
+              </SelectTrigger>
+              <SelectContent>
+                {AGENT_OPTIONS.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {formData.driver === "Outros" && (
+              <Input
+                placeholder="Especifique o condutor"
+                value={formData.driverCustom}
+                onChange={(e) => handleInputChange("driverCustom", e.target.value)}
+                className="h-10 mt-2"
+              />
+            )}
+          </div>
+
+          {/* Apoio */}
+          <div className="space-y-2">
+            <Label htmlFor="support" className="font-semibold uppercase text-sm">
+              Apoio
+            </Label>
+            <Select value={formData.support} onValueChange={(val) => handleSelectChange("support", val)}>
+              <SelectTrigger id="support" className="h-12">
+                <SelectValue placeholder="Selecione o apoio" />
+              </SelectTrigger>
+              <SelectContent>
+                {AGENT_OPTIONS.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {formData.support === "Outros" && (
+              <Input
+                placeholder="Especifique o apoio"
+                value={formData.supportCustom}
+                onChange={(e) => handleInputChange("supportCustom", e.target.value)}
+                className="h-10 mt-2"
+              />
+            )}
+          </div>
+
+          {/* Data */}
+          <div className="space-y-2">
+            <Label htmlFor="date" className="font-semibold uppercase text-sm">
+              Data
             </Label>
             <Input
-              id="agentName"
-              placeholder="Digite o nome do agente"
-              value={formData.agentName}
-              onChange={(e) => setFormData({ ...formData, agentName: e.target.value })}
-              className="h-12 text-base rounded-lg"
+              id="date"
+              type="date"
+              value={formData.date}
+              onChange={(e) => handleInputChange("date", e.target.value)}
+              className="h-12"
             />
           </div>
 
-          {/* Vehicle ID */}
+          {/* KM Inicial */}
           <div className="space-y-2">
-            <Label htmlFor="vehicleId" className="text-base font-medium">
-              ID da Viatura *
+            <Label htmlFor="initialKm" className="font-semibold uppercase text-sm">
+              KM Inicial
             </Label>
             <Input
-              id="vehicleId"
-              placeholder="Ex: VT-001"
-              value={formData.vehicleId}
-              onChange={(e) => setFormData({ ...formData, vehicleId: e.target.value })}
-              className="h-12 text-base rounded-lg"
-            />
-          </div>
-
-          {/* Opening KM */}
-          <div className="space-y-2">
-            <Label htmlFor="openingKm" className="text-base font-medium">
-              KM de Abertura *
-            </Label>
-            <Input
-              id="openingKm"
+              id="initialKm"
               type="number"
-              placeholder="Ex: 15000"
-              value={formData.openingKm}
-              onChange={(e) => setFormData({ ...formData, openingKm: e.target.value })}
-              className="h-12 text-base rounded-lg"
+              placeholder="0"
+              value={formData.initialKm}
+              onChange={(e) => handleInputChange("initialKm", e.target.value)}
+              className="h-12"
             />
           </div>
 
-          {/* Date and Time */}
+          {/* Hora Inicial */}
           <div className="space-y-2">
-            <Label htmlFor="registeredAt" className="text-base font-medium">
-              Data e Hora *
+            <Label htmlFor="initialTime" className="font-semibold uppercase text-sm">
+              Hora Inicial
             </Label>
             <Input
-              id="registeredAt"
-              type="datetime-local"
-              value={formData.registeredAt}
-              onChange={(e) => setFormData({ ...formData, registeredAt: e.target.value })}
-              className="h-12 text-base rounded-lg"
-            />
-          </div>
-
-          {/* Observations */}
-          <div className="space-y-2">
-            <Label htmlFor="observations" className="text-base font-medium">
-              Observações
-            </Label>
-            <Textarea
-              id="observations"
-              placeholder="Adicione observações se necessário"
-              value={formData.observations}
-              onChange={(e) => setFormData({ ...formData, observations: e.target.value })}
-              className="min-h-24 text-base rounded-lg"
+              id="initialTime"
+              type="time"
+              value={formData.initialTime}
+              onChange={(e) => handleInputChange("initialTime", e.target.value)}
+              className="h-12"
             />
           </div>
 
           {/* Submit Button */}
           <Button
             type="submit"
-            disabled={isSubmitting}
-            className="w-full h-14 text-base font-semibold rounded-lg bg-accent hover:bg-accent/90"
+            className="w-full h-12 text-base font-semibold uppercase bg-accent hover:bg-accent/90 rounded-lg"
           >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                Registrando...
-              </>
-            ) : (
-              <>
-                <Check className="w-5 h-5 mr-2" />
-                Registrar Viatura
-              </>
-            )}
+            Registrar KM
           </Button>
         </form>
       </CardContent>

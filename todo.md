@@ -66,3 +66,10 @@
 
 ## Melhorias Solicitadas
 - [x] Mover navegação de abas para o topo da página
+
+## Alterações Solicitadas - Sprint 2
+- [x] Converter todos os menus para MAIÚsCULA
+- [x] Reformular formulário Viatura: Viatura, Condutor, Apoio, Data, KM INICIAL, HORA INICIAL
+- [ ] Implementar fluxo de finalização de viatura com KM FINAL e HORA FINAL
+- [x] Reformular formulário Ocorrências: Viatura, Condutor, Apoio, Código
+- [x] Adicionar campo customizável para opção "Outros" em todos os dropdowns

@@ -99,31 +99,31 @@ export default function Home() {
           <TabsList className="grid w-full grid-cols-4 bg-transparent rounded-none h-auto p-0 border-b border-border">
             <TabsTrigger
               value="dashboard"
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:bg-transparent py-4 flex flex-col items-center gap-1"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:bg-transparent py-4 flex flex-col items-center gap-1 text-xs font-semibold uppercase"
             >
               <BarChart3 className="w-5 h-5" />
-              <span className="text-xs">Painel</span>
+              <span>Painel</span>
             </TabsTrigger>
             <TabsTrigger
               value="viatura"
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:bg-transparent py-4 flex flex-col items-center gap-1"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:bg-transparent py-4 flex flex-col items-center gap-1 text-xs font-semibold uppercase"
             >
               <Truck className="w-5 h-5" />
-              <span className="text-xs">Viatura</span>
+              <span>Viatura</span>
             </TabsTrigger>
             <TabsTrigger
               value="occurrences"
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:bg-transparent py-4 flex flex-col items-center gap-1"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:bg-transparent py-4 flex flex-col items-center gap-1 text-xs font-semibold uppercase"
             >
               <AlertCircle className="w-5 h-5" />
-              <span className="text-xs">Ocorrências</span>
+              <span>Ocorrências</span>
             </TabsTrigger>
             <TabsTrigger
               value="reports"
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:bg-transparent py-4 flex flex-col items-center gap-1"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-accent data-[state=active]:bg-transparent py-4 flex flex-col items-center gap-1 text-xs font-semibold uppercase"
             >
               <BarChart3 className="w-5 h-5" />
-              <span className="text-xs">Relatórios</span>
+              <span>Relatórios</span>
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -145,11 +145,11 @@ export default function Home() {
               className="w-full"
             >
               <TabsList className="grid w-full grid-cols-2 bg-muted p-1 rounded-lg mb-6">
-                <TabsTrigger value="register" className="flex items-center gap-2">
+                <TabsTrigger value="register" className="flex items-center gap-2 uppercase font-semibold text-xs">
                   <Plus className="w-4 h-4" />
-                  <span>Registrar</span>
+                  <span>Registrar KM</span>
                 </TabsTrigger>
-                <TabsTrigger value="history" className="flex items-center gap-2">
+                <TabsTrigger value="history" className="flex items-center gap-2 uppercase font-semibold text-xs">
                   <History className="w-4 h-4" />
                   <span>Histórico</span>
                 </TabsTrigger>
@@ -171,11 +171,11 @@ export default function Home() {
               className="w-full"
             >
               <TabsList className="grid w-full grid-cols-2 bg-muted p-1 rounded-lg mb-6">
-                <TabsTrigger value="register" className="flex items-center gap-2">
+                <TabsTrigger value="register" className="flex items-center gap-2 uppercase font-semibold text-xs">
                   <Plus className="w-4 h-4" />
-                  <span>Registrar</span>
+                  <span>Registrar Ocorrências</span>
                 </TabsTrigger>
-                <TabsTrigger value="history" className="flex items-center gap-2">
+                <TabsTrigger value="history" className="flex items-center gap-2 uppercase font-semibold text-xs">
                   <History className="w-4 h-4" />
                   <span>Histórico</span>
                 </TabsTrigger>
@@ -197,11 +197,11 @@ export default function Home() {
               className="w-full"
             >
               <TabsList className="grid w-full grid-cols-2 bg-muted p-1 rounded-lg mb-6">
-                <TabsTrigger value="register" className="flex items-center gap-2">
+                <TabsTrigger value="register" className="flex items-center gap-2 uppercase font-semibold text-xs">
                   <Plus className="w-4 h-4" />
                   <span>Gerar</span>
                 </TabsTrigger>
-                <TabsTrigger value="history" className="flex items-center gap-2">
+                <TabsTrigger value="history" className="flex items-center gap-2 uppercase font-semibold text-xs">
                   <History className="w-4 h-4" />
                   <span>Histórico</span>
                 </TabsTrigger>
