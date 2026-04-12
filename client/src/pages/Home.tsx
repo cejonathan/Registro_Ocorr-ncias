@@ -7,6 +7,7 @@ import { getLoginUrl } from "@/const";
 import { useState } from "react";
 import VehicleRegister from "@/pages/modules/VehicleRegister";
 import VehicleHistory from "@/pages/modules/VehicleHistory";
+import VehicleFinalize from "@/pages/modules/VehicleFinalize";
 import OccurrenceRegister from "@/pages/modules/OccurrenceRegister";
 import OccurrenceHistory from "@/pages/modules/OccurrenceHistory";
 import ReportGenerate from "@/pages/modules/ReportGenerate";
@@ -21,6 +22,7 @@ export default function Home() {
     occurrences: "register",
     reports: "register",
   });
+  const [showFinalize, setShowFinalize] = useState(false);
 
   if (loading) {
     return (
@@ -144,10 +146,14 @@ export default function Home() {
               onValueChange={(val) => setActiveSubTab({ ...activeSubTab, viatura: val })}
               className="w-full"
             >
-              <TabsList className="grid w-full grid-cols-2 bg-muted p-1 rounded-lg mb-6">
+              <TabsList className="grid w-full grid-cols-3 bg-muted p-1 rounded-lg mb-6">
                 <TabsTrigger value="register" className="flex items-center gap-2 uppercase font-semibold text-xs">
                   <Plus className="w-4 h-4" />
                   <span>Registrar KM</span>
+                </TabsTrigger>
+                <TabsTrigger value="finalize" className="flex items-center gap-2 uppercase font-semibold text-xs">
+                  <Truck className="w-4 h-4" />
+                  <span>Finalizar</span>
                 </TabsTrigger>
                 <TabsTrigger value="history" className="flex items-center gap-2 uppercase font-semibold text-xs">
                   <History className="w-4 h-4" />
@@ -156,6 +162,9 @@ export default function Home() {
               </TabsList>
               <TabsContent value="register" className="space-y-4">
                 <VehicleRegister />
+              </TabsContent>
+              <TabsContent value="finalize" className="space-y-4">
+                <VehicleFinalize onBack={() => setActiveSubTab({ ...activeSubTab, viatura: "history" })} />
               </TabsContent>
               <TabsContent value="history" className="space-y-4">
                 <VehicleHistory />
