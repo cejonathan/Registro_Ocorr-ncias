@@ -1,10 +1,22 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, router } from "./_core/trpc";
+import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
+import { z } from "zod";
+import {
+  createVehicle,
+  getUserVehicles,
+  getVehicleById,
+  createOccurrence,
+  getUserOccurrences,
+  getOccurrenceById,
+  createReport,
+  getUserReports,
+  getReportById,
+  getDashboardStats,
+} from "./db";
 
 export const appRouter = router({
-    // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
@@ -17,12 +29,112 @@ export const appRouter = router({
     }),
   }),
 
-  // TODO: add feature routers here, e.g.
-  // todo: router({
-  //   list: protectedProcedure.query(({ ctx }) =>
-  //     db.getUserTodos(ctx.user.id)
-  //   ),
-  // }),
+  vehicles: router({
+    create: protectedProcedure
+      .input(z.object({
+        agentName: z.string().min(1, "Nome do agente é obrigatório"),
+        vehicleId: z.string().min(1, "ID da viatura é obrigatório"),
+        openingKm: z.number().int().positive("KM deve ser um número positivo"),
+        registeredAt: z.date(),
+        observations: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const vehicle = await createVehicle({
+          userId: ctx.user.id,
+          agentName: input.agentName,
+          vehicleId: input.vehicleId,
+          openingKm: input.openingKm,
+          registeredAt: input.registeredAt,
+          observations: input.observations || null,
+          syncedToSheets: 0,
+          sheetsRowId: null,
+        });
+        return vehicle;
+      }),
+    list: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserVehicles(ctx.user.id);
+    }),
+    getById: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        return await getVehicleById(input.id);
+      }),
+  }),
+
+  occurrences: router({
+    create: protectedProcedure
+      .input(z.object({
+        occurrenceType: z.string().min(1, "Tipo de ocorrência é obrigatório"),
+        location: z.string().min(1, "Local é obrigatório"),
+        description: z.string().min(1, "Descrição é obrigatória"),
+        agentName: z.string().min(1, "Nome do agente é obrigatório"),
+        registeredAt: z.date(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const occurrence = await createOccurrence({
+          userId: ctx.user.id,
+          occurrenceType: input.occurrenceType,
+          location: input.location,
+          description: input.description,
+          agentName: input.agentName,
+          registeredAt: input.registeredAt,
+          syncedToSheets: 0,
+          sheetsRowId: null,
+        });
+        return occurrence;
+      }),
+    list: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserOccurrences(ctx.user.id);
+    }),
+    getById: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        return await getOccurrenceById(input.id);
+      }),
+  }),
+
+  reports: router({
+    create: protectedProcedure
+      .input(z.object({
+        reportType: z.string().min(1, "Tipo de relatório é obrigatório"),
+        periodStart: z.date(),
+        periodEnd: z.date(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const stats = await getDashboardStats(ctx.user.id, input.periodStart);
+
+        const report = await createReport({
+          userId: ctx.user.id,
+          reportType: input.reportType,
+          periodStart: input.periodStart,
+          periodEnd: input.periodEnd,
+          generatedAt: new Date(),
+          totalVehicles: stats.totalVehicles,
+          totalOccurrences: stats.totalOccurrences,
+          activeAgents: stats.activeAgents.size,
+          syncedToSheets: 0,
+          sheetsRowId: null,
+        });
+        return report;
+      }),
+    list: protectedProcedure.query(async ({ ctx }) => {
+      return await getUserReports(ctx.user.id);
+    }),
+    getById: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        return await getReportById(input.id);
+      }),
+  }),
+
+  dashboard: router({
+    stats: protectedProcedure
+      .input(z.object({ date: z.date().optional() }))
+      .query(async ({ ctx, input }) => {
+        const date = input.date || new Date();
+        return await getDashboardStats(ctx.user.id, date);
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
