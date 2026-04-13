@@ -15,6 +15,7 @@ import {
   getReportById,
   getDashboardStats,
 } from "./db";
+import { syncVehicleToSheets, syncOccurrenceToSheets } from "./googleSheets";
 
 export const appRouter = router({
   system: systemRouter,
@@ -49,6 +50,26 @@ export const appRouter = router({
           syncedToSheets: 0,
           sheetsRowId: null,
         });
+
+        // Sincronizar com Google Sheets
+        try {
+          const date = input.registeredAt.toLocaleDateString('pt-BR');
+          const time = input.registeredAt.toLocaleTimeString('pt-BR');
+          await syncVehicleToSheets({
+            date,
+            horaInicial: time,
+            viatura: input.vehicleId,
+            condutor: input.agentName,
+            apoio: "",
+            kmInicial: input.openingKm,
+            observacoes: input.observations,
+          });
+          console.log(`[tRPC] Vehicle synced to Google Sheets: ${input.vehicleId}`);
+        } catch (error) {
+          console.error("[tRPC] Error syncing vehicle to Google Sheets:", error);
+          // Não falhar a operação se a sincronização falhar
+        }
+
         return vehicle;
       }),
     list: protectedProcedure.query(async ({ ctx }) => {
@@ -81,6 +102,27 @@ export const appRouter = router({
           syncedToSheets: 0,
           sheetsRowId: null,
         });
+
+        // Sincronizar com Google Sheets
+        try {
+          const date = input.registeredAt.toLocaleDateString('pt-BR');
+          const time = input.registeredAt.toLocaleTimeString('pt-BR');
+          await syncOccurrenceToSheets({
+            date,
+            horaInicial: time,
+            viatura: "",
+            condutor: input.agentName,
+            apoio: "",
+            local: input.location,
+            codigo: input.occurrenceType,
+            observacao: input.description,
+          });
+          console.log(`[tRPC] Occurrence synced to Google Sheets: ${input.location}`);
+        } catch (error) {
+          console.error("[tRPC] Error syncing occurrence to Google Sheets:", error);
+          // Não falhar a operação se a sincronização falhar
+        }
+
         return occurrence;
       }),
     list: protectedProcedure.query(async ({ ctx }) => {
