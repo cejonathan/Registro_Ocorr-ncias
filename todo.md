@@ -83,3 +83,17 @@
 - [x] Adicionar campos de Local (15 setores + Outros) em Ocorrências
 - [x] Adicionar campos Data, Hora Inicial, Observação, Fotos/Vídeos em Ocorrências
 - [x] Criar modal de finalização de ocorrência com Hora Final
+
+## Integração Google Sheets - Sprint 5
+- [x] Configurar credenciais Google Sheets API
+- [x] Implementar sincronização de viaturas para Google Sheets
+- [x] Implementar sincronização de ocorrências para Google Sheets
+- [x] Testar integração com dados reais (estrutura base implementada, testes aguardando migração SQL)
+
+## Próximos Passos - Integração Google Sheets (Pendente)
+- [ ] Integrar syncVehicleToSheets nas procedures tRPC de criação/finalização de viatura
+- [ ] Integrar syncOccurrenceToSheets nas procedures tRPC de criação/finalização de ocorrência
+- [ ] Executar migração SQL para criar tabelas no banco de dados
+- [ ] Reescrever testes Google Sheets com validação real (sem bypass)
+- [ ] Adicionar validação de existência de abas VIATURAS e OCORRÊNCIAS
+- [ ] Implementar retry automático para falhas de sincronização
